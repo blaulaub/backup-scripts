@@ -21,7 +21,9 @@ for BASENAME in "${BASENAMES[@]}"; do
 		SNAPDATE="${SNAPSHOT#${BASENAME}_}"
 		SECONDS="$(date --utc -d "${SNAPDATE:0:4}-${SNAPDATE:4:2}-${SNAPDATE:6:2} ${SNAPDATE:9:2}:${SNAPDATE:11:2}:${SNAPDATE:13:2}" '+%s')"
 		AGE=$(( NOW - SECONDS ))
-		if (( MULTIPLIER * PREV_AGE < AGE )); then
+		if (( 0 == PREV_AGE )); then
+			PREV_AGE=$AGE
+		elif (( MULTIPLIER * PREV_AGE < AGE )); then
 			for (( I=0; I< ${#KILLLIST[@]}-1; I++ )); do
 				echo "${VOLUME}/${KILLLIST[$I]}"
 			done
