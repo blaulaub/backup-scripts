@@ -15,8 +15,8 @@ TIMESTAMP="$(date --utc '+%Y%m%dT%H%M%SZ')"
 
 REMOTE_USER="$1"    # e.g. "ansible-agent"
 REMOTE_SERVER="$2"  # e.g. "white-dwarf"
-LABEL="$3"          #
-SOURCE="$4"
+LABEL="$3"          # e.g. "white-dwarf.patchcode.ch
+SOURCE="$4"         # e.g. /
 TARGET_FOLDER="$5"  # e.g. "/backup"
 
 TARGET="${TARGET_FOLDER}/${LABEL}/${LABEL}_${TIMESTAMP}"
