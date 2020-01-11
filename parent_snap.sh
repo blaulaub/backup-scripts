@@ -35,7 +35,7 @@ then
   exit -1
 fi
 
-REMOTE_LIST=( $(ssh "${REMOTE_USER}@${REMOTE_SERVER}" sudo ls -1 "${REMOTE_FOLDER}/${ITEM}") )
+REMOTE_LIST=( $(ssh "${REMOTE_USER}@${REMOTE_SERVER}" sudo ls -1 "${REMOTE_FOLDER}/${ITEM}" | grep "${ITEM}") )
 if [ $? != 0 ]
 then
   echo "Failed to list remote snapshots." >&2
