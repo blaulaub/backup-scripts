@@ -25,12 +25,16 @@ then
   exit -1
 fi
 
+ssh "${REMOTE_USER}@${REMOTE_SERVER}" sudo sync
+
 TIMESTAMP=$("$CREATE_RSNAP" "$REMOTE_USER" "$REMOTE_SERVER" "$LABEL" "$REMOTE_VOLUME" "$REMOTE_FOLDER")
 if [ $? != 0 ]
 then
   echo "Failed to create snapshot" >&2
   exit -1
 fi
+
+ssh "${REMOTE_USER}@${REMOTE_SERVER}" sudo sync
 
 PARENT1=$(./parent_snap.sh "$LABEL" "$LOCAL_FOLDER" "$REMOTE_USER" "$REMOTE_SERVER" "$REMOTE_FOLDER")
 if [ $? != 0 ]
@@ -41,6 +45,8 @@ else
   echo "Do an incremental sync with common parent $PARENT1"
   ( ssh "${REMOTE_USER}@${REMOTE_SERVER}" sudo btrfs send -p "${REMOTE_FOLDER}/${LABEL}/${PARENT1}" "${REMOTE_FOLDER}/${LABEL}/${LABEL}_${TIMESTAMP}" ) | sudo btrfs receive "${LOCAL_FOLDER}/${LABEL}/"
 fi
+
+sudo sync
 
 PARENT2=$(./parent_snap.sh "$LABEL" "$LOCAL_FOLDER" "$FINAL_USER"  "$FINAL_SERVER" "$FINAL_FOLDER")
 if [ $? != 0 ]
